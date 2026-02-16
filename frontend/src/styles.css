@@ -47,7 +47,7 @@ footer {
   display: inline-block;
   padding: 8px 12px;
   margin-right: 8px;
-  border-radius: 8px;
+  border-radius: 20px;
   color: #fff;
   text-decoration: none;
   background: rgba(255, 255, 255, 0.04);
@@ -74,6 +74,40 @@ footer {
   background: #e6f0ff;
 }
 
+/* Make header Login/Register buttons behave like nav-link on hover/active
+   so both show white background and primary blue text when interacted */
+.navbar .button:not(.logout) {
+  background: #0b5ed7;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 20px;
+  text-decoration: none;
+  display: inline-block;
+}
+.navbar .button:not(.logout):hover,
+.navbar .button:not(.logout):active,
+.navbar .nav-link:active {
+  background: #fff;
+  color: #0b5ed7;
+  transform: translateY(-1px);
+}
+
+/* Ensure the header login link (auth-link) looks identical to the register button */
+.navbar .nav-link.auth-link {
+  background: #0b5ed7;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 20px;
+  text-decoration: none;
+  display: inline-block;
+}
+.navbar .nav-link.auth-link:hover,
+.navbar .nav-link.auth-link:active {
+  background: #fff;
+  color: #0b5ed7;
+  transform: translateY(-1px);
+}
+
 /* center footer content */
 footer {
   text-align: center;
@@ -87,31 +121,125 @@ main {
 
 /* Landing page styles */
 .landing-hero {
-  background: #fff;
+  background: #f6f8fa;
   min-height: 70vh;
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
 }
-.landing-inner{
-  display:flex;
-  width:100%;
-  max-width:1100px;
-  margin:0 auto;
-  gap:40px;
+.landing-inner {
+  display: flex;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 40px;
 }
-.landing-inner .left{flex:1}
-.landing-inner .right{flex:1;display:flex;align-items:center;justify-content:center}
-.landing-inner h1{font-size:64px;line-height:0.95;margin:0}
-.landing-inner .lead{color:#6b7280;margin-top:12px}
-.cta-row{margin-top:20px}
-.graphic{position:relative;width:360px;height:360px;display:flex;align-items:center;justify-content:center}
-.landing-logo{width:84px;height:84px}
-.pulse{position:absolute;width:120px;height:120px;border-radius:999px;background:radial-gradient(circle at center, rgba(124,58,237,0.18), rgba(124,58,237,0.04));animation:pulse 2.5s infinite}
-.marker{position:absolute;width:56px;height:56px;border-radius:999px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center}
-.marker-right{right:40px;top:40px;background:linear-gradient(180deg,#7c3aed,#ec4899)}
-.marker-left{right:140px;bottom:60px;background:#000}
-.marker .icon{font-size:20px}
-@keyframes pulse{0%{transform:scale(0.9);opacity:1}70%{transform:scale(1.3);opacity:0}100%{transform:scale(0.9);opacity:0}}
+.landing-inner .left {
+  flex: 1;
+}
+.landing-inner .right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.landing-inner h1 {
+  font-size: 64px;
+  line-height: 0.95;
+  margin: 0;
+}
+.landing-inner .lead {
+  color: #6b7280;
+  margin-top: 12px;
+}
+.cta-row {
+  margin-top: 20px;
+}
+.cta-row .link {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 6px;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.08s ease;
+}
+.cta-row .button {
+  /* ensure the landing button matches global button but with smoother transition */
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.08s ease;
+}
+.cta-row .button:hover,
+.cta-row .link:hover,
+.cta-row .button:active,
+.cta-row .link:active {
+  background: #fff;
+  color: #0b5ed7;
+  transform: translateY(-1px);
+}
+.graphic {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.landing-logo {
+  width: 84px;
+  height: 84px;
+}
+.pulse {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at center,
+    rgba(124, 58, 237, 0.18),
+    rgba(124, 58, 237, 0.04)
+  );
+  animation: pulse 2.5s infinite;
+}
+.marker {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: #000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.marker-right {
+  right: 40px;
+  top: 40px;
+  background: linear-gradient(180deg, #7c3aed, #ec4899);
+}
+.marker-left {
+  right: 140px;
+  bottom: 60px;
+  background: #000;
+}
+.marker .icon {
+  font-size: 20px;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
 
 .card {
   background: #fff;

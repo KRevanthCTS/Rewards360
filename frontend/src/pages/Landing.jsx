@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/Logo.svg'
+import Image from '../assets/Image.png'
 
 export default function Landing(){
   return (
@@ -15,11 +16,16 @@ export default function Landing(){
           </div>
         </div>
         <div className="right">
-          <div className="graphic">
+          <div
+            className="graphic"
+            style={{
+              backgroundImage: `url(${Image})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+          >
             <img src={logo} alt="logo" className="landing-logo" />
             <div className="pulse" />
-            <div className="marker marker-left"><span className="icon">🤝</span></div>
-            <div className="marker marker-right"><span className="icon">❤</span></div>
           </div>
         </div>
       </div>

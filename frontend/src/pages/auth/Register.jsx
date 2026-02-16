@@ -5,6 +5,7 @@ import api from '../../api/client'
 export default function Register(){
   const [f, setF] = useState({ name:'', email:'', phone:'', password:'', role:'USER', preferences:[], communication:'Email' })
   const [err, setErr] = useState({})
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const validate = ()=>{
@@ -66,7 +67,47 @@ export default function Register(){
         </div>
         <div>
           <label style={{fontSize: '16px'}}>Password</label>
-          <input className="input" type="password" name="password" value={f.password} onChange={onChange} placeholder="Enter your Password"/>
+          <div style={{position: 'relative'}}>
+            <input
+              className="input"
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              value={f.password}
+              onChange={onChange}
+              placeholder="Enter your Password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(s => !s)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-pressed={showPassword}
+              style={{
+                position: 'absolute',
+                right: 8,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                padding: 4,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              {showPassword ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1.5 12s4-7.5 10.5-7.5S22.5 12 22.5 12s-4 7.5-10.5 7.5S1.5 12 1.5 12z" stroke="#0b5ed7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="12" cy="12" r="3" stroke="#0b5ed7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19.5C5.5 19.5 1.5 12 1.5 12c1.46-2.57 3.76-4.7 6.54-6.02" stroke="#0b5ed7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M3 3l18 18" stroke="#0b5ed7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M9.88 9.88A3 3 0 0 0 14.12 14.12" stroke="#0b5ed7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </button>
+          </div>
           {err.password && <div className="error">{err.password}</div>}
         </div>
         <div>
