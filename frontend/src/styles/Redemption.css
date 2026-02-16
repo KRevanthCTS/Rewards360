@@ -1,0 +1,21 @@
+.redemption-page{font-family:system-ui,-apple-system,sans-serif;padding:20px;max-width:1200px;margin:0 auto}
+.redemption-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #e2e8f0}
+.redemption-title{margin:0;color:#1e293b;font-size:24px;font-weight:800}
+.redemption-count{background:#3b82f6;color:#fff;padding:8px 16px;border-radius:12px;font-size:14px;font-weight:700}
+.redemption-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.redemption-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.1);padding:20px;transition:transform .2s ease,box-shadow .2s ease}
+.redemption-card:hover{transform:translateY(-4px);box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.redemption-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #e5e7eb;gap:12px}
+.redemption-offer-title{color:#1e293b;font-size:16px;font-weight:700;flex:1;line-height:1.4}
+.redemption-points{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;padding:6px 12px;border-radius:8px;font-size:14px;font-weight:800;white-space:nowrap}
+.redemption-card-body{display:flex;flex-direction:column;gap:12px}
+.redemption-info-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.redemption-label{color:#64748b;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.redemption-value{color:#1e293b;font-size:14px;font-weight:600;text-align:right}
+.redemption-code{color:#3b82f6;font-weight:700;font-size:13px;background:#eff6ff;padding:4px 8px;border-radius:6px}
+.empty-state{text-align:center;padding:60px 20px;color:#64748b;background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-state>div:nth-child(2){font-size:18px;font-weight:600;color:#475569;margin-bottom:8px}
+.empty-subtext{font-size:14px;color:#94a3b8}
+@media(max-width:768px){.redemption-page{padding:16px}.redemption-header{flex-direction:column;align-items:flex-start;gap:12px}.redemption-title{font-size:20px}.redemption-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.redemption-card-header{flex-direction:column;align-items:flex-start}.redemption-points{align-self:flex-start}}

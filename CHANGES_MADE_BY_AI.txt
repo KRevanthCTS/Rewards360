@@ -1,0 +1,144 @@
+Files changed by the assistant (summary)
+
+1) frontend/src/pages/admin/Reports.jsx
+ - What I changed:
+   - Added early checks for an auth token (localStorage.getItem('token')) before requesting analytics or exporting data. If token missing, the UI now shows a helpful message instead of silently failing.
+   - Improved error handling for API calls: the UI now reports HTTP status codes (401, 403, and other status messages) and more descriptive server messages (err.response.data.message or err.response.data).
+   - Preserved existing behavior (pie chart, export formats) and UI layout; only added defensive checks and clearer messages for debugging.
+ - Why:
+   - To make it obvious when requests fail because the user is not authenticated (401) or lacks permission (403), and to give better diagnostics for network/CORS/server errors.
+ - Key additions (descriptive, not full file):
+   - token presence check before calling api.get('/analytics/kpis')
+   - enhanced catch: inspect err.response.status and err.response.data and set an appropriate message in state
+   - similar token check and improved catch for exportAnalyticsData when calling api.get(endpoint)
+
+2) backend/src/main/java/com/rewards360/config/WebCorsConfig.java
+ - What I changed:
+   - Replaced a hard-coded call to registry.addMapping(...).allowedOrigins(...) with registry.addMapping(...).allowedOriginPatterns("http://localhost:*", "http://127.0.0.1:*").
+   - Added a short comment explaining why allowedOriginPatterns is used (to allow credentials across localhost ports and avoid the Spring error when allowedOrigins contains '*').
+ - Why:
+   - The server threw an error when allowCredentials(true) was used in combination with the special '*' value for origins. Using allowedOriginPatterns("http://localhost:*") allows local dev origins on any port while retaining allowCredentials(true).
+
+Notes and next steps
+ - After these changes you must restart the backend so the new CORS config takes effect, and restart the frontend dev server as well.
+ - Commands (PowerShell):
+   cd C:\yagnesh\projecttt\Prjct_Mono\backend
+   mvn spring-boot:run
+   cd C:\yagnesh\projecttt\Prjct_Mono\frontend
+   npm run dev
+
+File created by the assistant: CHANGES_MADE_BY_AI.txt (this file)
+
+If you'd like, I can also:
+ - Show the exact diffs as a patch file or print the modified sections inline.
+ - Revert or further tweak the CORS config (for example, explicitly list allowed origins instead of using patterns).
+ - Make a dev-only helper in the frontend to show the current token (for easier debugging).
+
+Exact code added/changed
+------------------------
+
+1) frontend/src/pages/admin/Reports.jsx (added/changed sections)
+
+-- Added token check and improved error handling in the KPIs useEffect:
+
+    // inside useEffect before calling api.get
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Not authenticated. Please log in to view analytics.');
+      setLoading(false);
+      return;
+    }
+
+    api.get('/analytics/kpis')
+      .then(res => {
+        const data = res.data;
+        setKpis([
+          { label: 'Users', value: data.users || 0 },
+          { label: 'Offers', value: data.offers || 0 },
+          { label: 'Redemptions', value: data.redemptions || 0 },
+          { label: 'Redemption Rate (%)', value: data.redemptionRate ? data.redemptionRate.toFixed(2) : '0.00' }
+        ]);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("API error:", err);
+        const status = err?.response?.status;
+        const serverMsg = err?.response?.data?.message || err?.response?.data || err.message;
+        if (status === 401) {
+          setError('Unauthorized (401). Please sign in again.');
+        } else if (status === 403) {
+          setError('Forbidden (403). You do not have permission to view this data.');
+        } else if (status) {
+          setError(`Error ${status}: ${serverMsg}`);
+        } else {
+          setError(`Network error: ${serverMsg}`);
+        }
+        setLoading(false);
+      });
+
+-- Added token check and improved error handling in exportAnalyticsData:
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setMessage('Not authenticated. Please log in to export data.');
+      setExporting(false);
+      return;
+    }
+
+    try {
+      const res = await api.get(endpoint);
+      const data = res.data;
+      // (processing unchanged)
+    } catch (err) {
+      console.error("Export error:", err);
+      const status = err?.response?.status;
+      const serverMsg = err?.response?.data?.message || err?.response?.data || err.message;
+      if (status === 401) setMessage('Export failed: Unauthorized (401). Please log in.');
+      else if (status === 403) setMessage('Export failed: Forbidden (403).');
+      else if (status) setMessage(`Export failed: ${status} - ${serverMsg}`);
+      else setMessage(`Export failed: ${serverMsg}`);
+    } finally {
+      setExporting(false);
+    }
+
+2) backend/src/main/java/com/rewards360/config/WebCorsConfig.java (replaced allowedOrigins with allowedOriginPatterns)
+
+-- Original (removed):
+    registry.addMapping("/api/**")
+            .allowedOrigins(
+                    "http://localhost:3000", // React (CRA/Next)
+                    "http://localhost:5173", // React (Vite)
+                    "http://localhost:5174"  // React (Vite alternate port)
+            )
+            .allowedMethods("GET","POST","PATCH","DELETE","OPTIONS","PUT")
+            .allowedHeaders("*")
+            .allowCredentials(true);
+
+-- New (added):
+    // Use allowedOriginPatterns to support localhost on multiple ports
+    // and avoid the "allowedOrigins cannot contain '*' when allowCredentials is true" error.
+    registry.addMapping("/api/**")
+            .allowedOriginPatterns(
+                    "http://localhost:*",
+                    "http://127.0.0.1:*"
+            )
+            .allowedMethods("GET","POST","PATCH","DELETE","OPTIONS","PUT")
+            .allowedHeaders("*")
+            .allowCredentials(true);
+
+3) Note about `frontend/src/api/client.js` (no change made by me, just reference)
+
+-- Current content (unchanged):
+    import axios from 'axios'
+
+    const api = axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL + '/api' })
+
+    api.interceptors.request.use((config)=>{
+      const token = localStorage.getItem('token')
+      if(token){ config.headers.Authorization = `Bearer ${token}` }
+      return config
+    })
+
+    export default api
+
+End of exact code changes.

@@ -1,0 +1,162 @@
+/* Base styles */
+.reports-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.reports-title {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.reports-note {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Grid layout */
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 200px);
+  gap: 16px;
+  justify-content: center;
+}
+
+/* Cards */
+.reports-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.reports-label {
+  font-size: 16px;
+  color: #666;
+}
+
+.reports-value {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: -10px;
+}
+
+/* Chart container */
+.reports-chart {
+  width: 90%;
+  max-width: 400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.reports-chart canvas {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+/* Buttons */
+.reports-btn-outline {
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  border: 1px solid #4f46e5;
+  color: #4f46e5;
+  background: transparent;
+}
+
+.reports-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* Form Controls */
+.reports-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  color: #333;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%234f46e5' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.reports-select:focus {
+  outline: none;
+  border-color: #19191a;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(13, 13, 15, 0.2);
+}
+
+/* ---------------- Responsive Breakpoints ---------------- */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .reports-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .reports-chart {
+    max-width: 100%;
+  }
+
+  .reports-select {
+    font-size: 15px !important;
+    padding: 8px 11px !important;
+  }
+
+  .reports-select option {
+    font-size: 15px;
+    padding: 7px;
+  }
+}
+
+/* Mobiles */
+@media (max-width: 600px) {
+  .reports-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reports-title {
+    font-size: 19px;
+  }
+
+  .reports-value {
+    font-size: 19px;
+  }
+
+  .reports-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reports-btn-outline {
+    width: 100%;
+  }
+
+  /* Shrink the select box itself */
+  .reports-select {
+    font-size: 12px !important;
+    padding: 5px 8px !important;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+
+  /* Shrink the dropdown options */
+  .reports-select option {
+    font-size: 10px;
+    padding: 4px;
+  }
+}

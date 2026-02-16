@@ -1,0 +1,373 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.d-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.d-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.d-section-title {
+  margin: 0 0 18px 0;
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.d-card-title {
+  margin: 0 0 8px 0;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Points Summary Card */
+.d-card.d-ps {
+  background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+  border: none;
+  color: #fff;
+  padding: 32px;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+.d-ps-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.d-ps-left {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.d-ps-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.d-ps-sub {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.d-ps-strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.d-ps-dot {
+  margin: 0 8px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.d-ps-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 10px 16px;
+  width: fit-content;
+}
+
+.d-ps-pill-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.d-ps-pill-value {
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
+}
+
+.d-ps-right {
+  text-align: right;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 24px 32px;
+  min-width: 200px;
+}
+
+.d-ps-right-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.d-ps-right-value {
+  color: #fff;
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Daily Activities */
+.d-activities-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.d-claim-card {
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.d-claim-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  border-color: #3b82f6;
+}
+
+.d-claim-card h4 {
+  color: #1e293b;
+  font-size: 16px;
+  margin: 0;
+  font-weight: 700;
+}
+
+.d-claim-card p {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
+}
+
+.d-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #10b981;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.d-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.d-btn:hover {
+  background: #1d4ed8;
+}
+
+.d-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Table */
+.d-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 600px;
+  margin-top: 8px;
+}
+
+.d-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.d-table th,
+.d-table td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.d-table thead th {
+  background: #f8fafc;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 13px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.d-table td {
+  color: #475569;
+  font-size: 14px;
+}
+
+.d-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.d-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .d-ps-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .d-ps-right {
+    width: 100%;
+    text-align: left;
+  }
+
+  .d-card.d-ps {
+    padding: 24px 20px;
+  }
+
+  .d-ps-title {
+    font-size: 22px;
+  }
+
+  .d-ps-right-value {
+    font-size: 40px;
+  }
+
+  .d-activities-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Stats Cards */
+.d-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.d-stat-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.d-stat-icon {
+  font-size: 32px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.d-stat-content {
+  flex: 1;
+}
+
+.d-stat-label {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.d-stat-value {
+  color: #1e293b;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.d-stat-earned {
+  color: #059669;
+}
+
+.d-stat-redeemed {
+  color: #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .d-ps-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .d-ps-right {
+    width: 100%;
+    text-align: left;
+  }
+
+  .d-card.d-ps {
+    padding: 24px 20px;
+  }
+
+  .d-ps-title {
+    font-size: 22px;
+  }
+
+  .d-ps-right-value {
+    font-size: 40px;
+  }
+
+  .d-activities-row {
+    grid-template-columns: 1fr;
+  }
+
+  .d-stats-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .d-page {
+    gap: 16px;
+  }
+
+  .d-card {
+    padding: 18px;
+  }
+
+  .d-table th,
+  .d-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

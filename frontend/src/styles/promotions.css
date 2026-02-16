@@ -1,0 +1,152 @@
+:root{
+  --card-radius:12px;
+  --card-height:180px;
+  --accent:#0066cc;
+}
+.promotions{
+  padding:16px;
+  box-sizing:border-box;
+}
+.top-grid .card{ 
+  min-height:120px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.section{
+  margin-top:24px;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+.section h3{
+  margin:0 0 16px;
+  font-size:18px;
+  font-weight:600;
+  color:#1a1a1a;
+}
+.categories-grid{
+  gap:16px;
+}
+.category-card{
+  height:var(--card-height);
+  border-radius:var(--card-radius);
+  overflow:hidden;
+  background-size:cover !important;
+  background-position:center !important;
+  display:flex;
+  align-items:flex-end;
+  color:#fff;
+  transition:transform 0.2s;
+}
+.category-card:hover{
+  transform:translateY(-4px);
+}
+.card-overlay{
+  width:100%;
+  background:rgba(0,0,0,0.5);
+  padding:14px;
+  box-sizing:border-box;
+}
+.card-overlay h4{
+  margin:0 0 4px;
+  font-size:16px;
+}
+.card-overlay p{
+  margin:0 0 10px;
+  font-size:13px;
+  opacity:0.95;
+}
+.button{
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:10px 16px;
+  border-radius:6px;
+  text-decoration:none;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:500;
+  transition:background 0.2s;
+  min-width:120px;
+  text-align:center;
+}
+.button:hover{
+  background:#0052a3;
+}
+.button-large{
+  padding:12px 20px;
+  font-size:14px;
+}
+.table-scroll{
+  overflow-x:auto;
+  border-radius:8px;
+  border:1px solid #e5e7eb;
+}
+.analytics-table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+}
+.analytics-table .th{
+  text-align:left;
+  background:#f9fafb;
+  border-bottom:2px solid #e5e7eb;
+  padding:12px;
+  font-weight:600;
+  font-size:13px;
+  color:#374151;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+.analytics-table .td{
+  padding:12px;
+  border-bottom:1px solid #f3f4f6;
+  font-size:14px;
+  color:#1f2937;
+}
+.analytics-table tbody tr:hover{
+  background:#f9fafb;
+}
+.empty-note{
+  color:#6b7280;
+  padding:16px;
+  text-align:center;
+  font-size:14px;
+}
+.analytics-wrapper{padding-top:0}
+
+.promotions .card .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  margin: 12px auto 0;
+  text-align: center;
+  width: fit-content;
+}
+
+@supports not (display: inline-flex) {
+  .promotions .card .button {
+    display: inline-block;
+    padding: 10px 16px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+}
+
+@media (max-width:900px){
+  .grid.cols-3{grid-template-columns:repeat(2, 1fr)}
+}
+
+@media (max-width:600px){
+  .promotions{padding:12px}
+  .section{padding:16px}
+  .grid.cols-3{grid-template-columns:1fr}
+  .category-card{height:150px}
+  .analytics-table{font-size:13px}
+  .analytics-table .th,.analytics-table .td{padding:8px}
+}
