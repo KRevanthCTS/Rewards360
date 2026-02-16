@@ -1,0 +1,11 @@
+# Dependency directories
+node_modules/
+
+# Vite build output
+frontend/dist/
+
+# IDE / OS files
+.vscode/
+*.log
+*.tmp
+.DS_Store
