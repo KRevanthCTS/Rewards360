@@ -28,6 +28,12 @@ export default function Header(){
             <Link className="nav-link" to="/user/redemptions">Redemptions</Link>
             <Link className="nav-link" to="/user/transactions">Transactions</Link>
           </>)}
+          {!role && (
+            <>
+              <Link className="nav-link" to="/login">Login</Link>
+              <Link className="button" to="/register" style={{marginLeft:8}}>Register</Link>
+            </>
+          )}
           {role && <button className="button logout" onClick={logout}>Logout</button>}
         </nav>
       </div>

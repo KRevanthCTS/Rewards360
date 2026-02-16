@@ -16,6 +16,7 @@ import FraudMonitor from './pages/admin/FraudMonitor'
 import Reports from './pages/admin/Reports'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import Landing from './pages/Landing'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import { UserProvider } from './context/UserContext'
@@ -27,7 +28,7 @@ export default function App(){
         <Header />
         <main>
           <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot" element={<Forgot />} />
