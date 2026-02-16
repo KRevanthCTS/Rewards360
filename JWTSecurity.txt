@@ -1,0 +1,105 @@
+Overview — how JWT tokens are generated and validated in this project
+
+This project uses a small JWT utility service (`JwtService`) together with a request filter (`JwtAuthFilter`) plus Spring Security configuration (`SecurityConfig`) to implement token-based (stateless) authentication for the backend APIs.
+
+Files I inspected (paths relative to project root):
+- `backend/src/main/java/com/rewards360/service/JwtService.java`
+- `backend/src/main/java/com/rewards360/service/JwtAuthFilter.java`
+- `backend/src/main/java/com/rewards360/config/SecurityConfig.java`
+- `backend/src/main/java/com/rewards360/controller/AuthController.java`
+- `backend/src/main/resources/application-sqlserver.properties` (contains `app.jwt.secret` and `app.jwt.expiryMillis`)
+
+1) Token generation (what happens when a user logs in)
+- Login endpoint: `AuthController.login()` authenticates credentials using `AuthenticationManager`.
+  - If authentication succeeds, the controller loads the `User` from DB and creates a Spring `UserDetails` object:
+    new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), List.of(SimpleGrantedAuthority("ROLE_" + user.getRole().name())))
+  - The controller then calls `jwtService.generateToken(userDetails)` to create the JWT string and returns it in the response.
+
+- How `JwtService.generateToken(...)` builds the token (see `JwtService.java`):
+  - It calls JJWT's builder (io.jsonwebtoken.Jwts.builder()):
+    - `.setClaims(extraClaims)` — additional custom claims map (empty by default)
+    - `.setSubject(userDetails.getUsername())` — the username (email) becomes the JWT subject
+    - `.setIssuedAt(new Date(System.currentTimeMillis()))`
+    - `.setExpiration(new Date(System.currentTimeMillis() + expiry))` — expiry is read from `app.jwt.expiryMillis` (default 86400000 ms = 24h)
+    - `.signWith(getSignInKey(), SignatureAlgorithm.HS256)` — signs the token using an HMAC key derived from the Base64 secret
+    - `.compact()` — produces the compact token string
+  - `getSignInKey()` decodes the Base64 `app.jwt.secret` value and makes an HMAC key via `Keys.hmacShaKeyFor(byte[])`.
+
+2) JwtService responsibilities (detailed methods)
+- `extractUsername(String token)` — returns the subject (username) using `extractClaim(token, Claims::getSubject)`.
+- `extractClaim(String token, Function<Claims,T> resolver)` — generic helper to extract a single claim.
+- `extractAllClaims(String token)` — uses `Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody()` to parse and validate the signature and return claims.
+- `isTokenValid(String token, UserDetails userDetails)` — checks that the token subject equals `userDetails.getUsername()` and that the token is not expired.
+- `isTokenExpired` / `extractExpiration` — helpers for expiration checks.
+
+3) JwtAuthFilter responsibilities and flow
+- `JwtAuthFilter` extends `OncePerRequestFilter`, so it runs once per request before the controller.
+- `doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain)` does the following:
+  - Reads the `Authorization` header. If missing or not starting with `Bearer `, the filter does nothing and passes control along the chain.
+  - Extracts the raw JWT by removing the `Bearer ` prefix.
+  - Calls `jwtService.extractUsername(jwt)` to get the username from token claims.
+  - If a username is present and there's no existing Authentication in `SecurityContextHolder`, it loads `UserDetails` using the configured `UserDetailsService`.
+  - Calls `jwtService.isTokenValid(jwt, userDetails)` and, if true, creates a `UsernamePasswordAuthenticationToken` with `userDetails` and the user's authorities and sets it into `SecurityContextHolder.getContext().setAuthentication(...)`.
+  - Continues the filter chain.
+
+4) How the filter is added into the security chain
+- In `SecurityConfig.securityFilterChain(HttpSecurity http)` the code configures:
+  - CSRF disabled, session management set to `SessionCreationPolicy.STATELESS` (no HTTP session for auth)
+  - Public endpoints (e.g., `/api/auth/**`, `GET /api/public/**`) are permitted, admin endpoints require `ROLE_ADMIN`, others require authentication.
+  - The JWT filter is registered with `.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)` — this ensures the JWT is processed before Spring attempts username/password form authentication.
+- Authentication is wired with a `DaoAuthenticationProvider` using the `UserDetailsService` and `BCryptPasswordEncoder`.
+
+5) Why each piece is necessary for security (concise)
+- JwtService: centralizes token creation and parsing. It:
+  - Signs tokens with a secret so peers can verify authenticity (prevents tampering).
+  - Encodes who the user is (subject) and expiration claims (validity window).
+  - Provides helpers to validate tokens (`isTokenValid`) and extract claims securely.
+- JwtAuthFilter: enforces token-based authentication on each request.
+  - It looks for an Authorization Bearer token, validates it, and if valid, places an Authentication into the SecurityContext so the rest of Spring Security (authorization checks, method-security) works normally.
+  - Because the app is stateless, the filter is the only place that re-creates the user's Authentication on each request from the token.
+- SecurityConfig: wires the filter into the Spring Security filter chain, sets stateless policy, and configures which endpoints are public vs restricted.
+
+6) Key functions and libraries used (concrete names)
+- io.jsonwebtoken (jjwt): `Jwts.builder()`, `.signWith(...)`, `.compact()`, `Jwts.parserBuilder().setSigningKey(...).build().parseClaimsJws(token)`
+- JwtService methods: `generateToken(...)`, `extractUsername(...)`, `extractClaim(...)`, `isTokenValid(...)`, `extractAllClaims(...)`, `getSignInKey()`
+- JwtAuthFilter: `doFilterInternal(...)` - creates `UsernamePasswordAuthenticationToken` and calls `SecurityContextHolder.getContext().setAuthentication(...)`
+- SecurityConfig: `.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)` and `SessionCreationPolicy.STATELESS`
+
+7) Important security notes & possible improvements
+- Current validation (`isTokenValid`) checks subject equality and expiry only. It does not:
+  - Check a token revocation list (so tokens remain valid for their full lifetime even if a user is disabled or their role changes).
+  - Verify additional claims (e.g., token ID `jti`) for single-use tokens.
+  - Check that the user's current credentials/secret have not changed since the token was issued. If you need immediate revocation on password reset or role change, consider:
+    - Maintaining a token blacklist or a "token invalidation" timestamp in the user record and compare issuedAt > lastPasswordChange.
+    - Using short-lived access tokens + refresh tokens.
+- Secret management: `app.jwt.secret` is a Base64 string in properties. In production store this secret securely (env vars, secrets manager, vault) and use a sufficiently long key. The project already expects a Base64 secret and uses `Keys.hmacShaKeyFor`.
+- Algorithm: HS256 (HMAC) is used. If asymmetric signing (RS/ES) is desired, JJWT also supports RSA/ECDSA keys.
+
+8) Typical request lifecycle example
+- Client POSTs credentials to `/api/auth/login`.
+- Server authenticates, creates JWT via `JwtService.generateToken(...)` and returns token.
+- Client includes header `Authorization: Bearer <token>` on subsequent requests.
+- For each request, `JwtAuthFilter`:
+  - Parses token, validates signature (parserBuilder + signing key), extracts username and expiration.
+  - Loads user via `UserDetailsService` and verifies token validity with `JwtService.isTokenValid(...)`.
+  - Creates Authentication and stores it in `SecurityContext` so controllers/method-security can authorize.
+
+9) References in code
+- Token creation: `JwtService.generateToken(Map<String,Object>, UserDetails)`
+- Token parsing: `Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token)`
+- Filter: `JwtAuthFilter.doFilterInternal(...)` located at `backend/src/main/java/com/rewards360/service/JwtAuthFilter.java`
+- Filter registration: `SecurityConfig.securityFilterChain(...)` with `.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)`
+- Secret/expiry values: `backend/src/main/resources/application-sqlserver.properties` (`app.jwt.secret`, `app.jwt.expiryMillis`)
+
+10) Quick checklist to harden (suggested, optional):
+- Move `app.jwt.secret` to environment variable or secret store.
+- Consider using short-lived access tokens + refresh tokens.
+- Implement token revocation strategy (blacklist or "lastPasswordChange" timestamp check).
+- Add claim validations (audience, issuer) if relevant for multi-tenant or cross-service scenarios.
+
+If you'd like, I can:
+- Add a short README section (or update `README.md`) that documents how to rotate the secret and recommended expiry values.
+- Implement a simple token revocation mechanism (e.g., store a `tokenVersion` or `lastTokenInvalidationAt` on user entity and verify in `isTokenValid`).
+
+---
+Generated from reading the actual project files (JwtService, JwtAuthFilter, SecurityConfig, AuthController). If you want the explanation shortened, expanded, or turned into a markdown doc for the repo (e.g., `backend/docs/JWTSecurity.md`), tell me which format you prefer and I'll add it.

@@ -129,8 +129,8 @@ main {
 }
 
 .left-image {
-  background: url("https://images.unsplash.com/photo-1523275335684-37898b6baf30")
-    center/cover no-repeat;
+  /* Local SVG hero that follows project color palette */
+  background: url("./assets/login-hero.svg") center/cover no-repeat;
   height: 100%;
   border-radius: 20px 20px;
 }
@@ -139,6 +139,9 @@ main {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 70vh;
+  /* Keep uniform padding around the auth area so spacing is equal in all directions */
+  padding: 20px; /* same as main padding */
+  gap: 20px; /* equal gap between columns */
 }
 
 .error {
