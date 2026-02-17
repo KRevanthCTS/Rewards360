@@ -28,8 +28,7 @@ export default function Header(){
             <Link className="nav-link" to="/user/redemptions">Redemptions</Link>
             <Link className="nav-link" to="/user/transactions">Transactions</Link>
           </>)}
-          {!role && (
-            <>
+          {!role && ( <>
               {/* mark login with an auth-link class so we can style it identically to the register button */}
               <Link className="nav-link auth-link" to="/login">Login</Link>
               <Link className="button" to="/register" style={{marginLeft:8}}>Register</Link>
