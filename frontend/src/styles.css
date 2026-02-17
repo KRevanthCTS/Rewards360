@@ -343,3 +343,16 @@ main {
   /* keep default list item layout but ensure spacing */
   margin: 0;
 }
+
+/* Role list (bullet-style) used in auth forms */
+.role-list {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 6px 0;
+}
+.role-list li {
+  margin: 6px 0;
+}
+.role-list input[type="radio"] {
+  margin-right: 8px;
+}

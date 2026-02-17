@@ -47,15 +47,11 @@ export default function Login(){
         <p style={{textAlign: 'center',fontSize:'16px'}}>Pick your role, then login using your password or OTP.</p>
         <form onSubmit={submit}>
           <label>Login as:</label>
-          <div className="flex" style={{gap:12}}> 
-            <select name="role" value={form.role} onChange={onChange} className="input" style={{flex:1}}>
-              <option>USER</option>
-              <option>ADMIN</option>
-            </select>
-            <select name="mode" value={form.mode} onChange={onChange} className="input" style={{flex:1}}>
-              <option>Password</option>
-              <option>OTP</option>
-            </select>
+          <div className="flex" style={{gap:12, alignItems: 'flex-start'}}> 
+            <ul className="role-list" style={{alignItems: 'center', margin:6}}>
+              <input type="radio" name="role" value="USER" checked={form.role === 'USER'} onChange={onChange} /> User
+              <input type="radio" name="role" value="ADMIN" checked={form.role === 'ADMIN'} onChange={onChange} /> Admin
+            </ul>
           </div>
           <input className="input" 
           name="email" 

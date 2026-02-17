@@ -45,10 +45,10 @@ export default function Register(){
   <form onSubmit={submit} className="grid cols-2" style={{ gap: 8 }}> 
         <div>
           <label style={{fontSize: '16px'}}>Register as</label>
-          <select className="input" name="role" value={f.role} onChange={onChange}>
-            <option>USER</option>
-            <option>ADMIN</option>
-          </select>
+          <ul className="role-list" style={{margin:6}}>
+            <input type="radio" name="role" value="USER" checked={f.role === 'USER'} onChange={onChange} /> User
+            <input type="radio" name="role" value="ADMIN" checked={f.role === 'ADMIN'} onChange={onChange} /> Admin
+          </ul>
         </div>
         <div>
           <label style={{fontSize: '16px'}}>Name</label>
