@@ -30,7 +30,8 @@ export default function OffersAdmin() {
   }, []);
   const validate = () => {
     if (!o.title.trim()) return "Title is required";
-    if (!o.category.trim()) return "Category is required";
+    // Category may be empty to indicate the offer applies to ALL categories
+    // (leave blank for All categories)
     if (!o.description.trim()) return "Description is required";
     if (Number.isNaN(Number(o.costPoints)) || Number(o.costPoints) < 0)
       return "Cost points must be a non-negative number";
@@ -47,7 +48,10 @@ export default function OffersAdmin() {
     }
     try {
       const payload = { ...o };
+      // If tierLevel is empty string, treat as null (All tiers)
       if (!payload.tierLevel) payload.tierLevel = null;
+      // If category is empty or whitespace, treat as null (All categories)
+      if (!payload.category || !payload.category.trim()) payload.category = null;
       await api.post("/admin/offers", payload);
       setMsg("Offer created successfully");
       setO({
@@ -81,7 +85,7 @@ export default function OffersAdmin() {
           <label>Category</label>
           <input
             className="input"
-            placeholder="e.g., Electronics"
+            placeholder="e.g., Electronics (leave blank for All categories)"
             value={o.category}
             onChange={(e) => setO((p) => ({ ...p, category: e.target.value }))}
           />

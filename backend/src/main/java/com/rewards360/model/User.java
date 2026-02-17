@@ -3,7 +3,9 @@ package com.rewards360.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate; 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp; 
 
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
@@ -20,5 +22,7 @@ public class User {
     private Role role; // ADMIN or USER
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private CustomerProfile profile;
-    private LocalDate createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }
